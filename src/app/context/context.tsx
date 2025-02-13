@@ -1,17 +1,27 @@
-import { createContext } from "react";
+"use client";
+import { createContext, useState } from "react";
 import {Inputs} from '../admin/page'
 
-const Quiz = createContext<Inputs[] | null>(null);
+interface QuestionProps {
+    questions: Inputs[],
+    setQuestions: React.Dispatch<React.SetStateAction<Inputs[]>>;
+}
+
+const QuizContext = createContext<QuestionProps | null>(null);
+
 
 function QuizProvider ({ children }: {children: React.ReactNode}) {
 
+    const [questions, setQuestions] = useState<Inputs[]>([]);
+
+
     return (
 
-        <Quiz value={''}>
+        <QuizContext value={{questions,setQuestions}}>
             {children}
-        </Quiz>
+        </QuizContext>
 
     );
 }
 
-export {Quiz, QuizProvider}
+export {QuizContext, QuizProvider}
