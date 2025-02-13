@@ -1,9 +1,10 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 
 
-type Inputs = {
-    Question: string
+export type Inputs = {
+    Question: string,
     allAnswer: 
     {
         answer1: string,
@@ -11,32 +12,35 @@ type Inputs = {
         answer3: string,
         answer4: string,
     }
-
 }
 
 
 export default function Admin() {
+
+    const [questions, setQuestions] = useState<Inputs[]>([]);
     const {
         register,
         handleSubmit,
     } = useForm<Inputs>()
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
+        console.log(data);
+        setQuestions((prev) => [...prev, data]);
+    }
 
-
-    console.log("hej")
+    useEffect(() => {
+        console.log(questions)
+    }, [questions])
 
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <input style={{color: "black"}} defaultValue="" {...register("Question")} />
-            <input style={{color: "black"}} defaultValue=""{...register("allAnswer.answer1", { required: true })} />
-            <input style={{color: "black"}} defaultValue=""{...register("allAnswer.answer2", { required: true })} />
-            <input style={{color: "black"}} defaultValue=""{...register("allAnswer.answer3", { required: true })} />
-            <input style={{color: "black"}} defaultValue=""{...register("allAnswer.answer4", { required: true })} />
-            
-            <input type="submit" />
-            <select/>
+        <form onSubmit={handleSubmit(onSubmit)} className="w-100 h-100 flex flex-col gap-4 place-items-center">
+            <input placeholder="Question" className="p-3 border-2 w-2/3" style={{color: "black"}} defaultValue="" {...register("Question")} />
+            <input placeholder="answer one"className="p-3 border-2 w-2/3"style={{color: "black"}} defaultValue=""{...register("allAnswer.answer1", { required: true })} />
+            <input placeholder="answer two"className="p-3 border-2 w-2/3"style={{color: "black"}} defaultValue=""{...register("allAnswer.answer2", { required: true })} />
+            <input placeholder="answer three"className="p-3 border-2 w-2/3"style={{color: "black"}} defaultValue=""{...register("allAnswer.answer3", { required: true })} />
+            <input placeholder="answer four"className="p-3 border-2 w-2/3" style={{color: "black"}} defaultValue=""{...register("allAnswer.answer4", { required: true })} />
+            <button type="submit" className="w-fit h-fit p-5 bg-green-500">Submit question</button>
         </form>
     )
 }
